@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kimyooong.login_test.mapper.UserMapper">
+
+    <select id="selectUserByPn" parameterType="String" resultType="User">
+        SELECT
+            *
+        FROM
+            TC_USER
+        WHERE
+            PHONE_NUMBER = #{phone_number}
+        LIMIT
+            1
+    </select>
+    <select id="selectUserById" parameterType="Long" resultType="User">
+        SELECT
+            *
+        FROM
+            TC_USER
+        WHERE
+            USER_ID = #{user_id}
+        LIMIT
+            1
+    </select>
+    <insert id="insertUser" parameterType="User" >
+        INSERT INTO
+            TC_USER
+                (PASSWORD,EMAIL,NICK_NAME,NAME,PHONE_NUMBER)
+            VALUES
+                (#{password},#{email},#{nickName},#{name},#{phoneNumber})
+    </insert>
+
+
+
+</mapper>
