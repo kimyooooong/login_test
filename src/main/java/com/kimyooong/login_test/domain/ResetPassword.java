@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResetPassword {
+
     private Long rpId;
     private Long userId;
+    private String phoneNumber;
     private String randomNumber;
     private Boolean confirm;
     private String expireDate;

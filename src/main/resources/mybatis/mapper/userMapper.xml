@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kimyooong.login_test.mapper.UserMapper">
 
+    <!--로그인 관련 -->
     <select id="selectUserByPn" parameterType="String" resultType="User">
         SELECT
             *
@@ -22,7 +23,7 @@
         LIMIT
             1
     </select>
-    <insert id="insertUser" parameterType="User" >
+    <insert id="insertUser" parameterType="User">
         INSERT INTO
             TC_USER
                 (PASSWORD,EMAIL,NICK_NAME,NAME,PHONE_NUMBER)
@@ -30,6 +31,59 @@
                 (#{password},#{email},#{nickName},#{name},#{phoneNumber})
     </insert>
 
+
+    <!--패스워드 리셋 관련 -->
+    <update id="updateUserForPassword" parameterType="User">
+        UPDATE
+            USER
+        SET
+            PASSWORD = #{password}
+        WHERE
+            USER_ID = #{userId}
+    </update>
+
+
+    <select id="selectResetPasswordByRpId" parameterType="Long" resultType="ResetPassword">
+        SELECT
+            *
+        FROM
+            RESET_PASSWORD
+        WHERE
+            RP_ID = #{rpId}
+            AND CONFIRM = 0
+        LIMIT
+            1
+    </select>
+
+    <select id="selectResetPasswordByPhoneNumber" parameterType="String" resultType="ResetPassword">
+        SELECT
+            *
+        FROM
+            RESET_PASSWORD
+        WHERE
+            PHONE_NUMBER = #{phoneNumber}
+            AND CONFIRM = 0
+            AND EXPIRE_DATE <![CDATA[ > ]]> NOW()
+        ORDER BY
+            RP_ID DESC
+        LIMIT
+            1
+    </select>
+    <insert id="insertResetPassword" parameterType="ResetPassword">
+        INSERT INTO
+           RESET_PASSWORD
+                (PHONE_NUMBER , RANDOM_NUMBER , EXPIRE_DATE )
+           VALUES
+               (#{phoneNumber} , #{randomNumber} , DATE_ADD(NOW() , INTERVAL 20 MINUTE ))
+    </insert>
+    <update id="updateResetPasswordForConfirm" parameterType="Long">
+        UPDATE
+            RESET_PASSWORD
+        SET
+            CONFIRM = 1
+        WHERE
+            RP_ID ={rpId}
+    </update>
 
 
 </mapper>

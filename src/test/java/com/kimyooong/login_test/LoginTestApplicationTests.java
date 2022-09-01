@@ -8,6 +8,9 @@ class LoginTestApplicationTests {
 
     @Test
     void contextLoads() {
+
+        int randomNumber = (int)(Math.random() * 1000000);
+        System.out.println(randomNumber);
     }
 
 }

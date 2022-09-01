@@ -36,10 +36,11 @@ public class UserApiController {
     @PostMapping("/cert-phone")
     public ResponseEntity<RestResponse> certPhone(@RequestBody Map<String, String> map) {
 
-        log.info("map : {}" , map);
-
+        log.info("phoneNumber : {}" , map.get("phoneNumber"));
+        userService.certPhoneNumber(Boolean.valueOf(map.get("flag")), map.get("phoneNumber"));
         return ResponseEntity.ok(RestResponse.ok());
     }
+
 
     @ApiOperation("전화 번호 인증 - 인증 번호 확인")
     @PostMapping("/cert-phone-confirm")
