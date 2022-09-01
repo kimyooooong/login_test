@@ -26,33 +26,32 @@ public class UserApiController {
 
     private final PasswordEncoder passwordEncoder;
 
+
     @ApiOperation("전화 번호 인증 - 유저 디비에 전화번호가 존재하는지 확인. " +
             "\n flag 값으로 " +
-            "\n 가입시 인증에 대한 사용. ( 유저 디비에 값이 없는지를 검사. )" +
-            "\n 비밀번호 초기화 인지에 대한 사용. ( 유저 디비에 값이 있는지를 검사.)" +
-            "\n 에 대한 여부를 결정." +
+            "\n true - > 가입시 인증에 대한 사용. ( 유저 디비에 값이 없는지를 검사. )" +
+            "\n false -> 비밀번호 초기화 인지에 대한 사용. ( 유저 디비에 값이 있는지를 검사.)" +
             "\n 성공 시 인증 번호를 리턴. "
     )
     @PostMapping("/cert-phone")
     public ResponseEntity<RestResponse> certPhone(@RequestBody Map<String, String> map) {
 
-        log.info("phoneNumber : {}" , map.get("phoneNumber"));
-        userService.certPhoneNumber(Boolean.valueOf(map.get("flag")), map.get("phoneNumber"));
-        return ResponseEntity.ok(RestResponse.ok());
+        return ResponseEntity.ok(RestResponse.ok(userService.certPhoneNumber(Boolean.valueOf(map.get("flag")), map.get("phoneNumber"))));
     }
-
 
     @ApiOperation("전화 번호 인증 - 인증 번호 확인")
     @PostMapping("/cert-phone-confirm")
     public ResponseEntity<RestResponse> certPhoneConfirm(@RequestBody Map<String, String> map) {
 
+        userService.certConfirm(map.get("phoneNumber") , map.get("number"));
         return ResponseEntity.ok(RestResponse.ok());
     }
 
     @ApiOperation("비밀번호 초기화 - 핸드폰 번호와 바꿀 패스워드 입력.")
     @PostMapping("/reset_password")
-    public ResponseEntity<RestResponse> resetPassword(@RequestBody String phoneNumber) {
-
+    public ResponseEntity<RestResponse> resetPassword(@RequestBody Map<String, String> map) {
+        userService.setPasswordEncoder(passwordEncoder);
+        userService.resetPassword(map.get("phoneNumber") , map.get("password"));
         return ResponseEntity.ok(RestResponse.ok());
     }
 

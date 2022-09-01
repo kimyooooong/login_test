@@ -15,7 +15,7 @@ public interface UserMapper {
     /* 리셋 패스워드 관련 */
     void updateUserForPassword(User user);
     void insertResetPassword(ResetPassword resetPassword);
-    ResetPassword selectResetPasswordByPhoneNumber(String phoneNumber);
+    ResetPassword selectResetPasswordByCert(ResetPassword resetPassword);
     ResetPassword selectResetPasswordByRpId(Long rpId);
     void updateResetPasswordForConfirm(Long rpId);
 }

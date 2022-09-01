@@ -92,7 +92,18 @@ public class UserService {
      * @param check - true 인경우 회원가입 시 사용 , false 인 경우 비밀번호 재설정 시 사용.
      * @param phoneNumber - 폰 넘버 체크.
      */
-    public void certPhoneNumber(Boolean check , String phoneNumber){
+    public Integer certPhoneNumber(Boolean check , String phoneNumber){
+
+        //회원 정보 확인.
+        User selectUser = getUserByPn(phoneNumber);
+
+        // 회원가입이고 폰번호로 가입된 번호가 있을때 오류.
+        if(check && selectUser != null){
+            throw new ServiceException("이미 가입된 전화 번호 입니다.");
+        // 비밀 번호 재설정 이고 가입된 번호가 없을 때 오류
+        } else if(!check && selectUser == null){
+            throw new ServiceException("전화 번호가 존재 하지 않습니다.");
+        }
 
         int randomNumber = (int)(Math.random() * 1000000) + 100000;
 
@@ -104,6 +115,37 @@ public class UserService {
                 .randomNumber(String.valueOf(randomNumber))
                 .build()
         );
+
+        return randomNumber;
     }
 
+    public void certConfirm(String phoneNumber , String number){
+
+        //인증 여부 확인.
+        ResetPassword resetPassword = userMapper.selectResetPasswordByCert(ResetPassword.builder()
+                .phoneNumber(phoneNumber)
+                .randomNumber(number)
+                .build());
+
+        //잘못된 경우.
+        if(resetPassword == null){
+            throw new ServiceException("이미 인증이 만료되었거나 잘못된 전화 번호 입니다.");
+        }
+
+        //문제 없는경우 - 인증 컨펌 진행.
+        userMapper.updateResetPasswordForConfirm(resetPassword.getRpId());
+    }
+
+    public void resetPassword(String phoneNumber , String password){
+
+        User selectUser = getUserByPn(phoneNumber);
+
+        if(selectUser == null){
+            throw new ServiceException("존재하지 않는 전화번호 입니다.");
+        }
+
+        selectUser.setPassword(passwordEncoder.encode(password));
+        userMapper.updateUserForPassword(selectUser);
+
+    }
 }

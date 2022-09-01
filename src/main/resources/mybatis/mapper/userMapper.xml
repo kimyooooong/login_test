@@ -41,8 +41,6 @@
         WHERE
             USER_ID = #{userId}
     </update>
-
-
     <select id="selectResetPasswordByRpId" parameterType="Long" resultType="ResetPassword">
         SELECT
             *
@@ -55,13 +53,14 @@
             1
     </select>
 
-    <select id="selectResetPasswordByPhoneNumber" parameterType="String" resultType="ResetPassword">
+    <select id="selectResetPasswordByCert" parameterType="ResetPassword" resultType="ResetPassword">
         SELECT
             *
         FROM
             RESET_PASSWORD
         WHERE
             PHONE_NUMBER = #{phoneNumber}
+            AND RANDOM_NUMBER = #{randomNumber}
             AND CONFIRM = 0
             AND EXPIRE_DATE <![CDATA[ > ]]> NOW()
         ORDER BY
