@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class UserController implements ErrorController {
 
-    @GetMapping("/login")
+    @GetMapping({"/" , "/login"})
     public String login(){
         return "login";
     }
