@@ -35,7 +35,7 @@
     <!--패스워드 리셋 관련 -->
     <update id="updateUserForPassword" parameterType="User">
         UPDATE
-            USER
+            TC_USER
         SET
             PASSWORD = #{password}
         WHERE
@@ -52,7 +52,19 @@
         LIMIT
             1
     </select>
-
+    <select id="selectResetPasswordConfirmedByRpId" parameterType="ResetPassword" resultType="ResetPassword">
+        SELECT
+            *
+        FROM
+            RESET_PASSWORD
+        WHERE
+            RP_ID = #{rpId}
+            AND CONFIRM = 1
+        ORDER BY
+            RP_ID DESC
+        LIMIT
+            1
+    </select>
     <select id="selectResetPasswordByCert" parameterType="ResetPassword" resultType="ResetPassword">
         SELECT
             *
@@ -81,7 +93,7 @@
         SET
             CONFIRM = 1
         WHERE
-            RP_ID ={rpId}
+            RP_ID = #{rpId}
     </update>
 
 

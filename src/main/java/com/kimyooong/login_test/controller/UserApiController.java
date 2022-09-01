@@ -5,6 +5,7 @@ import com.kimyooong.login_test.domain.User;
 import com.kimyooong.login_test.security.JwtTokenProvider;
 import com.kimyooong.login_test.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -26,45 +27,81 @@ public class UserApiController {
 
     private final PasswordEncoder passwordEncoder;
 
-
-    @ApiOperation("전화 번호 인증 - 유저 디비에 전화번호가 존재하는지 확인. " +
-            "\n flag 값으로 " +
-            "\n true - > 가입시 인증에 대한 사용. ( 유저 디비에 값이 없는지를 검사. )" +
-            "\n false -> 비밀번호 초기화 인지에 대한 사용. ( 유저 디비에 값이 있는지를 검사.)" +
-            "\n 성공 시 인증 번호를 리턴. "
-    )
+    @ApiOperation("전화 번호 인증 - 유저 디비에 전화번호가 존재하는지 확인.")
     @PostMapping("/cert-phone")
-    public ResponseEntity<RestResponse> certPhone(@RequestBody Map<String, String> map) {
+    public ResponseEntity<RestResponse> certPhone(
+            @ApiParam("\n flag 에 따른 사용 유무 분기." +
+                    "\n true - > 가입 시 인증에 대한 사용. ( 유저 디비에 값이 없는지를 검사. )" +
+                    "\n false -> 비밀번호 초기화 인지에 대한 사용. ( 유저 디비에 값이 있는지를 검사.)" +
+                    "\n 성공 시 인증 번호를 리턴. "+
+                    "\n\n\n예시 ) " +
+                    "{\n" +
+                    "  \"phone_number\": \"01012341234\"\n" +
+                    "  \"flag\": \"true\"\n" +
+                    "}"
+            )
+            @RequestBody Map<String, String> map) {
 
-        return ResponseEntity.ok(RestResponse.ok(userService.certPhoneNumber(Boolean.valueOf(map.get("flag")), map.get("phoneNumber"))));
+        return ResponseEntity.ok(RestResponse.ok(userService.certPhoneNumber(Boolean.valueOf(map.get("flag")), map.get("phone_number"))));
     }
 
     @ApiOperation("전화 번호 인증 - 인증 번호 확인")
     @PostMapping("/cert-phone-confirm")
-    public ResponseEntity<RestResponse> certPhoneConfirm(@RequestBody Map<String, String> map) {
+    public ResponseEntity<RestResponse> certPhoneConfirm(
+            @ApiParam(
+                    "예시 ) " +
+                            "{\n" +
+                            "  \"phone_number\": \"01012341234\"\n" +
+                            "  \"number\": \"1234\",\n" +
+                    "}")@RequestBody Map<String, String> map) {
 
-        userService.certConfirm(map.get("phoneNumber") , map.get("number"));
+        userService.certConfirm(map.get("phone_number") , map.get("number"));
         return ResponseEntity.ok(RestResponse.ok());
     }
 
     @ApiOperation("비밀번호 초기화 - 핸드폰 번호와 바꿀 패스워드 입력.")
     @PostMapping("/reset_password")
-    public ResponseEntity<RestResponse> resetPassword(@RequestBody Map<String, String> map) {
+    public ResponseEntity<RestResponse> resetPassword(
+            @ApiParam(
+                    "예시 ) " +
+                            "{\n" +
+                            "  \"rpId\": \"인증받은 rpId\"\n" +
+                            "  \"phone_number\": \"01012341234\"\n" +
+                            "  \"password\": \"교체할 패스워드\",\n" +
+                            "}")
+            @RequestBody Map<String, String> map) {
         userService.setPasswordEncoder(passwordEncoder);
-        userService.resetPassword(map.get("phoneNumber") , map.get("password"));
+        userService.resetPassword(Long.valueOf(map.get("rpId")), map.get("phone_number") , map.get("password"));
         return ResponseEntity.ok(RestResponse.ok());
     }
 
     @ApiOperation("회원 가입")
     @PostMapping("/join")
-    public ResponseEntity<RestResponse> join(@RequestBody Map<String, String> user) {
+    public ResponseEntity<RestResponse> join(
+            @ApiParam(
+                    "예시 ) " +
+                    "{\n" +
+                    "  \"password\": \"1234\",\n" +
+                    "  \"email\": \"test@nate.com\",\n" +
+                    "  \"nick_name\": \"nick_name\",\n" +
+                    "  \"name\": \"nae\",\n" +
+                    "  \"phone_number\": \"01012341234\"\n" +
+                    "}")
+            @RequestBody Map<String, String> user) {
         userService.setPasswordEncoder(passwordEncoder);
         userService.join(user);
         return ResponseEntity.ok(RestResponse.ok());
     }
     @ApiOperation("로그인 - 성공 시 유저 정보 및 토큰 발급. ( 전화번호 , 비밀번호 필요 ) ")
     @PostMapping("/login")
-    public ResponseEntity<RestResponse> login(@RequestBody Map<String, String> user) {
+    public ResponseEntity<RestResponse> login(
+            @ApiParam(
+                    "예시 ) " +
+                            "{\n" +
+                            "  \"phone_number\": \"01012341234\"\n" +
+                            "  \"password\": \"1234\",\n" +
+                            "}")
+            @RequestBody Map<String, String> user) {
 
         userService.setPasswordEncoder(passwordEncoder);
         User selectUser =  userService.getLogin(user.get("phone_number") , user.get("password"));

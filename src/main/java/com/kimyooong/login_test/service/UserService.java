@@ -98,11 +98,15 @@ public class UserService {
         User selectUser = getUserByPn(phoneNumber);
 
         // 회원가입이고 폰번호로 가입된 번호가 있을때 오류.
-        if(check && selectUser != null){
-            throw new ServiceException("이미 가입된 전화 번호 입니다.");
+        if(check) {
+            if (selectUser != null) {
+                throw new ServiceException("이미 가입된 전화 번호 입니다.");
+            }
+        } else {
         // 비밀 번호 재설정 이고 가입된 번호가 없을 때 오류
-        } else if(!check && selectUser == null){
-            throw new ServiceException("전화 번호가 존재 하지 않습니다.");
+            if(selectUser == null) {
+                throw new ServiceException("전화 번호가 존재 하지 않습니다.");
+            }
         }
 
         int randomNumber = (int)(Math.random() * 1000000) + 100000;
@@ -136,12 +140,18 @@ public class UserService {
         userMapper.updateResetPasswordForConfirm(resetPassword.getRpId());
     }
 
-    public void resetPassword(String phoneNumber , String password){
+    public void resetPassword(Long rpId , String phoneNumber , String password){
 
         User selectUser = getUserByPn(phoneNumber);
 
         if(selectUser == null){
             throw new ServiceException("존재하지 않는 전화번호 입니다.");
+        }
+
+        ResetPassword resetPassword = userMapper.selectResetPasswordConfirmedByRpId(rpId);
+
+        if(resetPassword == null){
+            throw new ServiceException("인증을 받지 않았습니다.");
         }
 
         selectUser.setPassword(passwordEncoder.encode(password));

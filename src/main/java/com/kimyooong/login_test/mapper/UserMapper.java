@@ -17,5 +17,6 @@ public interface UserMapper {
     void insertResetPassword(ResetPassword resetPassword);
     ResetPassword selectResetPasswordByCert(ResetPassword resetPassword);
     ResetPassword selectResetPasswordByRpId(Long rpId);
+    ResetPassword selectResetPasswordConfirmedByRpId(Long rpId);
     void updateResetPasswordForConfirm(Long rpId);
 }
