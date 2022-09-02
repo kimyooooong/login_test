@@ -27,7 +27,8 @@ DB :
   * 휴대폰 인증 방식은 외부 연동을하지않고 DB 에만 기록하고 인증번호를 클라이언트에 전달하여 처리.
   * 모든 정보는 암호화 되어 디비에 저장하였으며 패스워드는 단방향 암호화 ( SHA-256 ) , 그 외 정보는 양방향 암호화 ( AES-256 ) 적용.
   * 사용된 REST-API 는 SWAGGER 로 문서 구현하여 확인 가능. ( localhost:8080/swagger-ui/index.html )
-  * 프론트 기술은 thymeleaf / Jquery 를 사용하였으며 로그인 폼 오픈 소스를 기반으로 구현하였음. ( https://colorlib.com/wp/template/login-form-v2/ ) 
+  * 프론트 기술은 thymeleaf / Jquery 를 사용하였으며 로그인 폼 오픈 소스를 기반으로 구현하였음. 
+   ( https://colorlib.com/wp/template/login-form-v2/ ) 
   
 --- 
 
