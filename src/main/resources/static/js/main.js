@@ -2,7 +2,6 @@
 (function ($) {
     "use strict";
 
-
     /*==================================================================
     [ Focus input ]*/
     $('.input100').each(function(){
@@ -13,7 +12,7 @@
             else {
                 $(this).removeClass('has-val');
             }
-        })    
+        })
     })
   
   
@@ -82,7 +81,6 @@
             $(this).find('i').removeClass('zmdi-eye-off');
             showPass = 0;
         }
-        
     });
 
 

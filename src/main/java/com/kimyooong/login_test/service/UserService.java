@@ -1,5 +1,6 @@
 package com.kimyooong.login_test.service;
 
+import com.kimyooong.login_test.component.AES256;
 import com.kimyooong.login_test.domain.ResetPassword;
 import com.kimyooong.login_test.domain.User;
 import com.kimyooong.login_test.exception.ServiceException;
@@ -21,26 +22,54 @@ public class UserService {
 
     private PasswordEncoder passwordEncoder;
 
+    private final AES256 aes256;
+
     public void setPasswordEncoder(PasswordEncoder passwordEncoder){
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void join(Map<String,String> user){
+    /**
+     * 패스워드 - 단방향 암호화 , 그 외 개인정보 양방향 암호화.
+     * @param user
+     * @throws Exception
+     */
+    public void join(Map<String,String> user) throws Exception {
 
         User insertUser = new User();
         insertUser.setPassword(passwordEncoder.encode(user.get("password")));
-        insertUser.setEmail(user.get("email"));
-        insertUser.setNickName(user.get("nick_name"));
-        insertUser.setName(user.get("name"));
-        insertUser.setPhoneNumber(user.get("phone_number"));
+        insertUser.setEmail(aes256.encrypt(user.get("email")));
+        insertUser.setNickName(aes256.encrypt(user.get("nick_name")));
+        insertUser.setName(aes256.encrypt(user.get("name")));
+        insertUser.setPhoneNumber(aes256.encrypt(user.get("phone_number")));
 
         log.info("user : {}" , insertUser);
 
         userMapper.insertUser(insertUser);
     }
 
+    /**
+     *  유저 데이터 복호화
+     * @param phoneNumber
+     * @return
+     */
     public User getUserByPn(String phoneNumber){
-        return userMapper.selectUserByPn(phoneNumber);
+
+        User enUser = null;
+
+        try {
+            String enPhoneNumber = aes256.encrypt(phoneNumber);
+
+            enUser = userMapper.selectUserByPn(enPhoneNumber);
+            enUser.setPhoneNumber(aes256.decrypt(enUser.getPhoneNumber()));
+            enUser.setEmail(aes256.decrypt(enUser.getEmail()));
+            enUser.setName(aes256.decrypt(enUser.getName()));
+            enUser.setNickName(aes256.decrypt(enUser.getNickName()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return enUser;
     }
 
     public User getLogin(String phoneNumber , String password){
@@ -123,7 +152,7 @@ public class UserService {
         return randomNumber;
     }
 
-    public void certConfirm(String phoneNumber , String number){
+    public ResetPassword certConfirm(String phoneNumber , String number){
 
         //인증 여부 확인.
         ResetPassword resetPassword = userMapper.selectResetPasswordByCert(ResetPassword.builder()
@@ -133,11 +162,13 @@ public class UserService {
 
         //잘못된 경우.
         if(resetPassword == null){
-            throw new ServiceException("이미 인증이 만료되었거나 잘못된 전화 번호 입니다.");
+            throw new ServiceException("이미 인증이 만료되었거나 잘못된 전화 번호 혹은 승인번호가 올바르지 않습니다.");
         }
 
         //문제 없는경우 - 인증 컨펌 진행.
         userMapper.updateResetPasswordForConfirm(resetPassword.getRpId());
+
+        return resetPassword;
     }
 
     public void resetPassword(Long rpId , String phoneNumber , String password){

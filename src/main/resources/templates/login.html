@@ -33,51 +33,104 @@
 		<div class="container-login100">
 			<div class="wrap-login100">
 				<form class="login100-form validate-form">
-					<span class="login100-form-title p-b-26">
-						Welcome
-						<br>Login Test
-					</span>
-					<span class="login100-form-title p-b-48">
-						<i class="zmdi zmdi-font"></i>
-					</span>
 
-					<div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
-						<input class="input100" type="text" name="phone_number">
-						<span class="focus-input100" data-placeholder="Phone-Number"></span>
-					</div>
-
-					<div class="wrap-input100 validate-input" data-validate="Enter password">
-						<span class="btn-show-pass">
-							<i class="zmdi zmdi-eye"></i>
+					<div id="login_form">
+						<span class="login100-form-title p-b-26">
+							Login ( 로그인 )
 						</span>
-						<input class="input100" type="password" name="pass">
-						<span class="focus-input100" data-placeholder="Password"></span>
-					</div>
 
-					<div class="container-login100-form-btn">
-						<div class="wrap-login100-form-btn">
-							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn">
-								Login
-							</button>
+						<div class="wrap-input100">
+							<input id="input_phone_number" class="input100" type="text">
+							<span class="focus-input100" data-placeholder="Phone-Number"></span>
+						</div>
+
+						<div class="wrap-input100" data-validate="Enter password">
+							<span class="btn-show-pass">
+								<i class="zmdi zmdi-eye"></i>
+							</span>
+							<input id="input_password" class="input100" type="password">
+							<span class="focus-input100" data-placeholder="Password"></span>
+						</div>
+
+						<div class="container-login100-form-btn">
+							<div class="wrap-login100-form-btn">
+								<div class="login100-form-bgbtn"></div>
+								<button id="btn_login" class="login100-form-btn">
+									Login
+								</button>
+							</div>
+						</div>
+
+						<div class="text-center p-t-115">
+							<span class="txt1">
+								Don’t have an account?
+							</span>
+
+							<a class="txt2" href="/join">
+								Sign Up
+							</a>
+							<br>
+							<span class="txt1">
+								Forgot your password?
+							</span>
+							<a class="txt2" href="/resetPassword">
+								Reset Password
+							</a>
 						</div>
 					</div>
+					<div id="logout_form">
 
-					<div class="text-center p-t-115">
-						<span class="txt1">
-							Don’t have an account?
+						<span class="login100-form-title p-b-26">
+							Login 성공
 						</span>
+						<div class="container-login100-form-btn">
+							<div class="wrap-login100-form-btn">
+								<div class="login100-form-bgbtn"></div>
+								<button id="btn_info" class="login100-form-btn">
+									내 정보 보기 ( 토큰 검증 )
+								</button>
+							</div>
+							<div id="info_form">
+								<br>
+								<div class="wrap-input100">
+									USER ID :
+									<input readonly id="input_readonly_user_id" class="input100" type="text">
+									<span class="focus-input100"></span>
+								</div>
+								<div class="wrap-input100">
+									PHONE_NUMBER :
+									<input readonly id="input_readonly_phone_number" class="input100" type="text">
+									<span class="focus-input100"></span>
+								</div>
 
-						<a class="txt2" href="#">
-							Sign Up
-						</a>
-						<br>
-						<span class="txt1">
-							Forgot your password?
-						</span>
-						<a class="txt2" href="#">
-							Reset Password
-						</a>
+								<div class="wrap-input100">
+									EMAIL :
+									<input readonly  id="input_readonly_email" class="input100" type="text">
+									<span class="focus-input100"></span>
+								</div>
+
+								<div class="wrap-input100">
+									NAME :
+									<input readonly  id="input_readonly_name" class="input100" type="text">
+									<span class="focus-input100"></span>
+								</div>
+
+								<div class="wrap-input100">
+									NickName :
+									<input readonly  id="input_readonly_nickName" class="input100" type="text">
+									<span class="focus-input100"></span>
+								</div>
+							</div>
+
+						</div>
+						<div class="container-login100-form-btn">
+							<div class="wrap-login100-form-btn">
+								<div class="login100-form-bgbtn"></div>
+								<button id="btn_logout" class="login100-form-btn">
+									LogOut
+								</button>
+							</div>
+						</div>
 					</div>
 				</form>
 			</div>
@@ -102,7 +155,107 @@
 <!--===============================================================================================-->
 	<script src="vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
+	<!--===============================================================================================-->
 	<script src="js/main.js"></script>
+	<script>
+		$(function() {
 
+			$("#login_form").hide();
+			$("#logout_form").hide();
+			$("#info_form").hide();
+			if(localStorage.getItem('token')){
+				$("#logout_form").show();
+			} else {
+				$("#login_form").show();
+			}
+
+			//로그아웃 버튼
+			$("#btn_logout").on('click' ,function (){
+
+				if(confirm('로그아웃을 진행하시겠습니까?')){
+					localStorage.setItem('token' ,'');
+					$("#logout_form").hide();
+					$("#login_form").show();
+				}
+			});
+
+			//정보 보기 버튼
+			$("#btn_info").on('click' ,function (){
+
+				let token = localStorage.getItem('token');
+
+				$.ajax ({
+					url: 'api/user/info',
+					type: "GET",
+					dataType: "json",
+					contentType: "application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader("Authorization", token);
+					},
+					success : function(response){
+						if(!response.success){
+							alert(response.data.msg);
+							return false;
+						} else {
+							let data = response.data;
+
+							$("#input_readonly_user_id").val(data.userId);
+							$("#input_readonly_email").val(data.email);
+		    				$("#input_readonly_phone_number").val(data.phoneNumber);
+		    				$("#input_readonly_name").val(data.name);
+		    				$("#input_readonly_nickName").val(data.nickName);
+
+							$("#info_form").show();
+							//로그인 성공했다면 토큰 저장.
+						}
+					}
+				});
+
+				return false;
+			});
+
+			//로그인 클릭.
+			$("#btn_login").on('click' ,function (){
+
+				if(!$("#input_phone_number").val()){
+					alert("전화 번호를 입력해주세요.");
+					return false;
+				}
+
+				if(!$("#input_password").val()){
+					alert("전화 번호를 입력해주세요.");
+					return false;
+				}
+
+				let jsonData = {
+					"phone_number": $("#input_phone_number").val(),
+					"password": $("#input_password").val()
+				};
+
+				$.ajax ({
+					url: 'api/user/login',
+					type: "POST",
+					data: JSON.stringify(jsonData),
+					dataType: "json",
+					contentType: "application/json; charset=utf-8",
+					success : function(response){
+						if(!response.success){
+							alert(response.data.msg);
+							return false;
+						} else {
+							let data = response.data;
+							//로그인 성공했다면 토큰 저장.
+							localStorage.setItem('token' , data.jwtToken);
+							$("#login_form").hide();
+							$("#logout_form").show();
+							console.log(data);
+						}
+					}
+				});
+
+				return false;
+			});
+		});
+	</script>
 </body>
 </html>

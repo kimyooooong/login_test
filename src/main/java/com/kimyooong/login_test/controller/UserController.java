@@ -26,7 +26,7 @@ public class UserController implements ErrorController {
 
     @GetMapping("/join")
     public String join(){
-        return "login";
+        return "join";
     }
 
     @GetMapping("/resetPassword")

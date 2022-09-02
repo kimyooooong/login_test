@@ -12,7 +12,7 @@ import java.util.Base64;
 public class AES256 {
 
     public static String alg = "AES/CBC/PKCS5Padding";
-    private final String key = "AES_256_SECRET_KEY";
+    private final String key = "AES_256_SECRET_KEY_LOGIN_TEST_12";
     private final String iv = key.substring(0, 16); // 16byte
     private final String algorithm = "AES";
 

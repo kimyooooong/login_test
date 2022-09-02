@@ -21,7 +21,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.kimyooong.login_test.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.kimyooong.login_test.controller.api"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());

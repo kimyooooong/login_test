@@ -1,4 +1,4 @@
-package com.kimyooong.login_test.controller;
+package com.kimyooong.login_test.controller.api;
 
 import com.kimyooong.login_test.common.RestResponse;
 import com.kimyooong.login_test.domain.User;
@@ -45,7 +45,7 @@ public class UserApiController {
         return ResponseEntity.ok(RestResponse.ok(userService.certPhoneNumber(Boolean.valueOf(map.get("flag")), map.get("phone_number"))));
     }
 
-    @ApiOperation("전화 번호 인증 - 인증 번호 확인")
+    @ApiOperation("전화 번호 인증 - 인증 번호 확인 ( 인증 확인이 되었으면 인증 된 리셋 패스워드 리턴 ) ")
     @PostMapping("/cert-phone-confirm")
     public ResponseEntity<RestResponse> certPhoneConfirm(
             @ApiParam(
@@ -55,8 +55,7 @@ public class UserApiController {
                             "  \"number\": \"1234\",\n" +
                     "}")@RequestBody Map<String, String> map) {
 
-        userService.certConfirm(map.get("phone_number") , map.get("number"));
-        return ResponseEntity.ok(RestResponse.ok());
+        return ResponseEntity.ok(RestResponse.ok(userService.certConfirm(map.get("phone_number") , map.get("number"))));
     }
 
     @ApiOperation("비밀번호 초기화 - 핸드폰 번호와 바꿀 패스워드 입력.")
@@ -75,7 +74,7 @@ public class UserApiController {
         return ResponseEntity.ok(RestResponse.ok());
     }
 
-    @ApiOperation("회원 가입")
+    @ApiOperation("회원 가입 - 패스워드 - 단방향 암호화 , 그 외 개인정보 양방향 암호화.")
     @PostMapping("/join")
     public ResponseEntity<RestResponse> join(
             @ApiParam(
@@ -84,10 +83,10 @@ public class UserApiController {
                     "  \"password\": \"1234\",\n" +
                     "  \"email\": \"test@nate.com\",\n" +
                     "  \"nick_name\": \"nick_name\",\n" +
-                    "  \"name\": \"nae\",\n" +
+                    "  \"name\": \"name\",\n" +
                     "  \"phone_number\": \"01012341234\"\n" +
                     "}")
-            @RequestBody Map<String, String> user) {
+            @RequestBody Map<String, String> user) throws Exception {
         userService.setPasswordEncoder(passwordEncoder);
         userService.join(user);
         return ResponseEntity.ok(RestResponse.ok());
