@@ -37,7 +37,7 @@ DB :
     * Java 11+
     * Mysql
   - 디비 스키마 실행
-    * /result/db_schema.sql 파일 실행. ( 디비 추가 및 테이블 추가. )
+    * /result/db_schema.sql  mysql 에서 DDL 파일 실행. ( 디비 추가 및 테이블 추가. )
     * 기본 유저이름은 : root  비밀번호 : toor 로 설정.
   - 서버 실행
     * 기본 포트는 8080 이며 내장 톰캣으로 실행 됨.
