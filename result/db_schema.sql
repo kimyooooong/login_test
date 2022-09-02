@@ -6,8 +6,6 @@ USE `dev`;
 -- ------------------------------------------------------
 -- Server version	8.0.30
 
--- username : root , password : toor
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -35,7 +33,7 @@ CREATE TABLE `reset_password` (
   `CREATE_DATE` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '생성 날짜',
   PRIMARY KEY (`RP_ID`),
   UNIQUE KEY `reset_password_un_phone_rn` (`PHONE_NUMBER`,`RANDOM_NUMBER`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='패스워드 리셋 관련 테이블.';
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='패스워드 리셋 관련 테이블.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +42,6 @@ CREATE TABLE `reset_password` (
 
 LOCK TABLES `reset_password` WRITE;
 /*!40000 ALTER TABLE `reset_password` DISABLE KEYS */;
-INSERT INTO `reset_password` VALUES (45,'jQvHkTLSLfulxknBzRnsWg==','305096',_binary '','2022-09-02 16:14:32','2022-09-02 15:54:32'),(46,'jQvHkTLSLfulxknBzRnsWg==','149646',_binary '','2022-09-02 16:14:50','2022-09-02 15:54:50'),(47,'dJ4zq5PVBIRbLgacK7kfMA==','445506',_binary '','2022-09-02 17:49:55','2022-09-02 17:29:55'),(48,'dJ4zq5PVBIRbLgacK7kfMA==','721940',_binary '','2022-09-02 17:50:47','2022-09-02 17:30:47');
 /*!40000 ALTER TABLE `reset_password` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,7 +63,7 @@ CREATE TABLE `tc_user` (
   `CREATE_DATE` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '유저 생성 날짜',
   PRIMARY KEY (`USER_ID`),
   UNIQUE KEY `tc_user_un_pn` (`PHONE_NUMBER`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='유저 정보 테이블.';
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='유저 정보 테이블.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -87,4 +84,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-09-02 17:43:28
+-- Dump completed on 2022-09-02 18:46:12
