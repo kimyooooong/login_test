@@ -2,8 +2,7 @@
 
 Java Spring / Rest API / JWT 기반 로그인 서비스 구현.
 
-
-
+![image](https://user-images.githubusercontent.com/103039923/188109048-f708be2b-451c-44b3-8a1b-3a1a3fab449e.png)
 
 ## 사용언어 및 프레임 워크
 
