@@ -40,7 +40,7 @@ public class UserApiController {
                     "  \"flag\": \"true\"\n" +
                     "}"
             )
-            @RequestBody Map<String, String> map) {
+            @RequestBody Map<String, String> map) throws Exception {
 
         return ResponseEntity.ok(RestResponse.ok(userService.certPhoneNumber(Boolean.valueOf(map.get("flag")), map.get("phone_number"))));
     }
@@ -53,7 +53,7 @@ public class UserApiController {
                             "{\n" +
                             "  \"phone_number\": \"01012341234\"\n" +
                             "  \"number\": \"1234\",\n" +
-                    "}")@RequestBody Map<String, String> map) {
+                    "}")@RequestBody Map<String, String> map) throws Exception {
 
         return ResponseEntity.ok(RestResponse.ok(userService.certConfirm(map.get("phone_number") , map.get("number"))));
     }

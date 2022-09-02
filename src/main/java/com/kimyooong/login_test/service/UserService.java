@@ -20,10 +20,10 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-    private PasswordEncoder passwordEncoder;
-
     private final AES256 aes256;
 
+
+    private PasswordEncoder passwordEncoder;
     public void setPasswordEncoder(PasswordEncoder passwordEncoder){
         this.passwordEncoder = passwordEncoder;
     }
@@ -119,9 +119,9 @@ public class UserService {
     /**
      *
      * @param check - true 인경우 회원가입 시 사용 , false 인 경우 비밀번호 재설정 시 사용.
-     * @param phoneNumber - 폰 넘버 체크.
+     * @param phoneNumber - 폰 넘버 체크. ( 폰 번호 암호화 )
      */
-    public Integer certPhoneNumber(Boolean check , String phoneNumber){
+    public Integer certPhoneNumber(Boolean check , String phoneNumber) throws Exception {
 
         //회원 정보 확인.
         User selectUser = getUserByPn(phoneNumber);
@@ -146,7 +146,7 @@ public class UserService {
         log.info("phoneNumber : {}" , phoneNumber);
 
         userMapper.insertResetPassword(ResetPassword.builder()
-                .phoneNumber(phoneNumber)
+                .phoneNumber(aes256.encrypt(phoneNumber))
                 .randomNumber(String.valueOf(randomNumber))
                 .build()
         );
@@ -154,11 +154,17 @@ public class UserService {
         return randomNumber;
     }
 
-    public ResetPassword certConfirm(String phoneNumber , String number){
+    /**
+     * 승인 번호 검사.
+     * @param phoneNumber
+     * @param number
+     * @return
+     */
+    public ResetPassword certConfirm(String phoneNumber , String number) throws Exception {
 
         //인증 여부 확인.
         ResetPassword resetPassword = userMapper.selectResetPasswordByCert(ResetPassword.builder()
-                .phoneNumber(phoneNumber)
+                .phoneNumber(aes256.encrypt(phoneNumber))
                 .randomNumber(number)
                 .build());
 
@@ -173,6 +179,12 @@ public class UserService {
         return resetPassword;
     }
 
+    /**
+     * 리셋 패스워드
+     * @param rpId
+     * @param phoneNumber
+     * @param password
+     */
     public void resetPassword(Long rpId , String phoneNumber , String password){
 
         User selectUser = getUserByPn(phoneNumber);
