@@ -126,6 +126,8 @@ public class UserService {
         //회원 정보 확인.
         User selectUser = getUserByPn(phoneNumber);
 
+        log.info("selectUser : {}" , selectUser);
+
         // 회원가입이고 폰번호로 가입된 번호가 있을때 오류.
         if(check) {
             if (selectUser != null) {

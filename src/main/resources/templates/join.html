@@ -36,49 +36,80 @@
 					<span class="login100-form-title p-b-26">
 						Join ( 회원 가입 )
 					</span>
+                <br><br>
+                <div id="div_phone">
+                    <div class="wrap-input100 validate-input" >
+                        <input id="input_reset_phone_number" class="input100" type="text" >
+                        <span class="focus-input100" data-placeholder="Phone-Number ( - 제외 )"></span>
+                    </div>
 
-                <div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
-                    <input class="input100" type="text" name="phone_number">
-                    <span class="focus-input100" data-placeholder="Phone_number"></span>
-                </div>
-
-                <div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
-                    <input class="input100" type="text" name="email">
-                    <span class="focus-input100" data-placeholder="Email"></span>
-                </div>
-
-                <div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
-                    <input class="input100" type="text" name="name">
-                    <span class="focus-input100" data-placeholder="Name"></span>
-                </div>
-
-                <div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
-                    <input class="input100" type="text" name="nick_name">
-                    <span class="focus-input100" data-placeholder="Nick_name"></span>
-                </div>
-
-                <div class="wrap-input100 validate-input" data-validate="Enter password">
-						<span class="btn-show-pass">
-							<i class="zmdi zmdi-eye"></i>
-						</span>
-                    <input class="input100" type="password" name="password">
-                    <span class="focus-input100" data-placeholder="Password"></span>
-                </div>
-
-                <div class="wrap-input100 validate-input" data-validate="Enter password">
-						<span class="btn-show-pass">
-							<i class="zmdi zmdi-eye"></i>
-						</span>
-                    <input class="input100" type="password" name="password_confirm">
-                    <span class="focus-input100" data-placeholder="Password_Confirm"></span>
-                </div>
-
-                <div class="container-login100-form-btn">
                     <div class="wrap-login100-form-btn">
                         <div class="login100-form-bgbtn"></div>
-                        <button class="login100-form-btn">
-                            Login
+                        <button id="btn_phone_cert" class="login100-form-btn">
+                            인증
                         </button>
+                    </div>
+                </div>
+                <br><br>
+                <div id="div_number">
+
+                    <div class="wrap-input100 validate-input" >
+                        <input id="input_reset_random_number" class="input100" type="text" >
+                        <span class="focus-input100" data-placeholder="승인번호 입력"></span>
+                    </div>
+                    <div class="wrap-login100-form-btn">
+                        <div class="login100-form-bgbtn"></div>
+                        <button id="btn_number_cert" class="login100-form-btn">
+                            승인번호 인증
+                        </button>
+                    </div>
+                </div>
+                <br>
+
+                <div id="div_join_after_form">
+
+                    <div class="wrap-input100 validate-input">
+                        <input id="input_join_phone_number" readonly  class="input100" type="text" name="phone_number">
+                        <span class="focus-input100" data-placeholder="Phone-Number ( - 제외 )"></span>
+                    </div>
+                    <div class="wrap-input100 validate-input">
+                        <input id="input_join_email" class="input100" type="text" name="email">
+                        <span class="focus-input100" data-placeholder="Email"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input">
+                        <input id="input_join_name" class="input100" type="text" name="name">
+                        <span class="focus-input100" data-placeholder="Name"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input">
+                        <input id="input_join_nick_name" class="input100" type="text" name="nick_name">
+                        <span class="focus-input100" data-placeholder="Nick_name"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input">
+                            <span class="btn-show-pass">
+                                <i class="zmdi zmdi-eye"></i>
+                            </span>
+                        <input id="input_join_password" class="input100" type="password" name="password">
+                        <span class="focus-input100" data-placeholder="Password"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input" data-validate="Enter password">
+                            <span class="btn-show-pass">
+                                <i class="zmdi zmdi-eye"></i>
+                            </span>
+                        <input id="input_join_password_confirm" class="input100" type="password" name="password_confirm">
+                        <span class="focus-input100" data-placeholder="Password_Confirm"></span>
+                    </div>
+
+                    <div class="container-login100-form-btn">
+                        <div class="wrap-login100-form-btn">
+                            <div class="login100-form-bgbtn"></div>
+                            <button id="btn_join" class="login100-form-btn">
+                                Join
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -106,6 +137,143 @@
 <script src="vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 <script src="js/main.js"></script>
+<script>
 
+    $(function() {
+
+        $("#div_number").hide();
+        $("#div_phone").show();
+        $("#div_join_after_form").hide();
+
+
+        //전화 번호 인증
+        $("#btn_phone_cert").on('click',function (){
+
+            if(!$("#input_reset_phone_number").val()){
+                alert('휴대폰 번호를 입력해주세요.');
+                return false;
+            }
+
+            let jsonData = {
+                "phone_number": $("#input_reset_phone_number").val(),
+                "flag" : true
+            };
+
+            $.ajax ({
+                url: 'api/user/cert-phone',
+                type: "POST",
+                data: JSON.stringify(jsonData),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success : function(response){
+                    if(!response.success){
+                        alert(response.data.msg);
+                        return false;
+                    } else {
+                        $("#div_number").show();
+
+                        console.log(response);
+                        $("#input_reset_random_number").val(response.data);
+                    }
+                }
+            });
+
+            return false;
+        });
+
+        //승인 번호 인증
+        $("#btn_number_cert").on('click',function (){
+
+            if(!$("#input_reset_phone_number").val()){
+                alert('승인 번호를 입력해주세요.');
+                return false;
+            }
+
+            let jsonData = {
+                "phone_number": $("#input_reset_phone_number").val(),
+                "number" : $("#input_reset_random_number").val()
+            };
+
+            $.ajax ({
+                url: 'api/user/cert-phone-confirm',
+                type: "POST",
+                data: JSON.stringify(jsonData),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success : function(response){
+                    if(!response.success){
+                        alert(response.data.msg);
+                        return false;
+                    } else {
+                        $("#div_join_after_form").show();
+                        $("#input_join_phone_number").val($("#input_reset_phone_number").val());
+                        $("#div_number").hide();
+                        $("#div_phone").hide();
+                    }
+                }
+            });
+
+            return false;
+        });
+
+        //로그인 클릭.
+        $("#btn_join").on('click', function () {
+
+            if (!$("#input_join_email").val()) {
+                alert("이메일을 입력해주세요.");
+                return false;
+            }
+
+            if (!$("#input_join_name").val()) {
+                alert("이름을 입력해주세요.");
+                return false;
+            }
+
+            if (!$("#input_join_nick_name").val()) {
+                alert("닉네임을 입력해주세요.");
+                return false;
+            }
+
+            if (!$("#input_join_password").val() || !$("#input_join_password_confirm").val()) {
+                alert("패스워드, 패스워드 확인 을/를 입력해주세요.");
+                return false;
+            }
+
+            if($("#input_join_password").val() !== $("#input_join_password_confirm").val() ){
+                alert('비밀번호가 서로 일치하지 않습니다.');
+                return false;
+            }
+
+            let jsonData = {
+                "password": $("#input_join_password").val(),
+                "email": $("#input_join_email").val(),
+                "nick_name": $("#input_join_nick_name").val(),
+                "name": $("#input_join_name").val(),
+                "phone_number": $("#input_join_phone_number").val()
+            };
+
+            $.ajax({
+                url: 'api/user/join',
+                type: "POST",
+                data: JSON.stringify(jsonData),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    if (!response.success) {
+                        alert(response.data.msg);
+                        return false;
+                    } else {
+                        //회원가입 성공했다면 로그인 페이지로 이동..
+                        alert('회원 가입에 성공하셨습니다.\n로그인 페이지로 이동합니다.');
+                        location.href='/login';
+                        return false;
+                    }
+                }
+            });
+
+            return false;
+        });
+    });
+</script>
 </body>
 </html>
