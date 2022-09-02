@@ -38,6 +38,7 @@
             TC_USER
         SET
             PASSWORD = #{password}
+            AND UPDATE_DATE = NOW()
         WHERE
             USER_ID = #{userId}
     </update>
