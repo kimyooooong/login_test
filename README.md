@@ -46,9 +46,10 @@ DB :
     * 기본 유저이름은 : root  비밀번호 : toor 로 설정.
   - 서버 실행
     * 기본 포트는 8080 이며 내장 톰캣으로 실행 됨.
-    * /result/login_test.jar 파일 실행. ( java -jar login_test.jar )
+    * /result/login_test.jar 파일 실행. 
+      - java -jar [프로젝트폴더]/login_test.jar
   - 페이지 소개
-    * / , /login -> 로그인 페이지
+    * / , /login -> 로그인 페이지 ( 로그인 시 내정보 보기 및 로그아웃 가능 ) 
     * /join -> 회원가입 페이지
     * /resetpassword -> 비밀번호 초기화 페이지
     
