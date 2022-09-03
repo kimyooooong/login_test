@@ -28,7 +28,7 @@ public class UserApiController {
     private final PasswordEncoder passwordEncoder;
 
     @ApiOperation("전화 번호 인증 - 유저 디비에 전화번호가 존재하는지 확인.")
-    @PostMapping("/cert-phone")
+    @PatchMapping("/cert-phone")
     public ResponseEntity<RestResponse> certPhone(
             @ApiParam("\n flag 에 따른 사용 유무 분기." +
                     "\n true - > 가입 시 인증에 대한 사용. ( 유저 디비에 값이 없는지를 검사. )" +
@@ -46,7 +46,7 @@ public class UserApiController {
     }
 
     @ApiOperation("전화 번호 인증 - 인증 번호 확인 ( 인증 확인이 되었으면 인증 된 리셋 패스워드 리턴 ) ")
-    @PostMapping("/cert-phone-confirm")
+    @PatchMapping("/cert-phone-confirm")
     public ResponseEntity<RestResponse> certPhoneConfirm(
             @ApiParam(
                     "예시 ) " +
@@ -59,7 +59,7 @@ public class UserApiController {
     }
 
     @ApiOperation("비밀번호 초기화 - 핸드폰 번호와 바꿀 패스워드 입력.")
-    @PostMapping("/reset_password")
+    @PatchMapping("/reset_password")
     public ResponseEntity<RestResponse> resetPassword(
             @ApiParam(
                     "예시 ) " +

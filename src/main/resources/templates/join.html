@@ -161,7 +161,7 @@
 
             $.ajax ({
                 url: 'api/user/cert-phone',
-                type: "POST",
+                type: "PATCH",
                 data: JSON.stringify(jsonData),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
@@ -196,7 +196,7 @@
 
             $.ajax ({
                 url: 'api/user/cert-phone-confirm',
-                type: "POST",
+                type: "PATCH",
                 data: JSON.stringify(jsonData),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",

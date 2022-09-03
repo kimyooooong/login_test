@@ -34,12 +34,6 @@ public class UserController implements ErrorController {
         return "resetPassword";
     }
 
-    @GetMapping("/info")
-    public String info(){
-        return "info";
-    }
-
-
     @GetMapping("/error")
     public String handleError(HttpServletRequest request) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
