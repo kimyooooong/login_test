@@ -27,9 +27,10 @@ DB :
 
   * 휴대폰 인증 방식은 외부 연동을하지않고 DB 에만 기록하고 인증번호를 클라이언트에 전달하여 처리.
   * 모든 정보는 암호화 되어 디비에 저장하였으며 패스워드는 단방향 암호화 ( SHA-256 ) , 그 외 정보는 양방향 암호화 ( AES-256 ) 적용.
-  * 사용된 REST-API 는 SWAGGER 로 문서 구현하여 확인 가능. ( http://localhost:8080/swagger-ui/index.html )
+  * 사용된 REST-API 는 SWAGGER 로 문서 구현하여 확인 가능. 
+   <br>( http://localhost:8080/swagger-ui/index.html )
   * 프론트 기술은 thymeleaf / Jquery 를 사용하였으며 로그인 폼 오픈 소스를 기반으로 구현하였음. 
-   ( https://colorlib.com/wp/template/login-form-v2/ ) 
+   <br>( https://colorlib.com/wp/template/login-form-v2/ ) 
   * 로그인은 로그인 성공 시 JWT 토큰을 로컬스토리지에 저장하여 로그인 유지도 가능.
   
 --- 
@@ -41,6 +42,7 @@ DB :
     * Mysql
   - 디비 스키마 덤프
     * 프로젝트 내의 result 폴더의 db_schema.sql 파일을 DUMP. ( 디비 추가 및 테이블 추가. )
+      - 덤프 명령어 : mysql -u [DB계정명] -p < [프로젝트폴더]/result/db_schema.sql
     * 기본 유저이름은 : root  비밀번호 : toor 로 설정.
   - 서버 실행
     * 기본 포트는 8080 이며 내장 톰캣으로 실행 됨.
