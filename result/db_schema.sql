@@ -27,13 +27,13 @@ DROP TABLE IF EXISTS `reset_password`;
 CREATE TABLE `reset_password` (
   `RP_ID` bigint NOT NULL AUTO_INCREMENT COMMENT '리셋 패스워드 고유 키',
   `PHONE_NUMBER` varchar(100) DEFAULT NULL COMMENT '유저 폰 번호',
-  `RANDOM_NUMBER` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '패스워드 리셋에 필요한 랜덤 숫자',
+  `RANDOM_NUMBER` varchar(100) DEFAULT NULL COMMENT '패스워드 리셋에 필요한 랜덤 숫자',
   `CONFIRM` bit(1) DEFAULT b'0' COMMENT '승인 여부',
   `EXPIRE_DATE` datetime DEFAULT NULL COMMENT '만료 날짜',
   `CREATE_DATE` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '생성 날짜',
   PRIMARY KEY (`RP_ID`),
   UNIQUE KEY `reset_password_un_phone_rn` (`PHONE_NUMBER`,`RANDOM_NUMBER`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='패스워드 리셋 관련 테이블.';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='패스워드 리셋 관련';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,7 +63,7 @@ CREATE TABLE `tc_user` (
   `CREATE_DATE` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '유저 생성 날짜',
   PRIMARY KEY (`USER_ID`),
   UNIQUE KEY `tc_user_un_pn` (`PHONE_NUMBER`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='유저 정보 테이블.';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='유저 정보 테이블';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -84,4 +84,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-09-02 18:46:12
+-- Dump completed on 2022-09-03 22:04:10
